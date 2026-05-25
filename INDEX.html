@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sweet Cookies DF</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe4;
+    --brown-dark: #3d1a0a;
+    --brown-mid: #7b3a1e;
+    --brown-accent: #a0522d;
+    --brown-light: #c4845a;
+    --warm-white: #fdf8f2;
+    --text-dark: #2a1206;
+    --shadow: rgba(61, 26, 10, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  header {
+    background: var(--brown-dark);
+    position: relative;
+    overflow: hidden;
+    padding: 60px 24px 50px;
+    text-align: center;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 60% 30%, rgba(160,82,45,0.3) 0%, transparent 70%);
+  }
+  .logo-wrapper {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .logo-icon {
+    width: 70px;
+    height: 70px;
+    background: var(--cream);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .logo-sweet {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 13px;
+    letter-spacing: 6px;
+    color: var(--brown-light);
+    text-transform: uppercase;
+  }
+  .logo-cookies {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--warm-white);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .logo-df {
+    font-size: 13px;
+    letter-spacing: 5px;
+    color: var(--brown-light);
+    font-weight: 300;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .header-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: rgba(245,239,228,0.6);
+    font-size: 15px;
+    margin-top: 18px;
+    position: relative;
+  }
+
+  /* SECTION TITLES */
+  .section-title {
+    text-align: center;
+    padding: 48px 24px 12px;
+  }
+  .section-title .sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--brown-accent);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .section-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    color: var(--brown-dark);
+    line-height: 1.05;
+  }
+  .section-title h2 em {
+    font-style: italic;
+    color: var(--brown-mid);
+  }
+  .divider {
+    width: 50px;
+    height: 2px;
+    background: var(--brown-accent);
+    margin: 16px auto 0;
+  }
+
+  /* MENU GRID */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 28px 20px 10px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .cookie-card {
+    background: var(--warm-white);
+    border-radius: 18px;
+    padding: 20px 20px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    box-shadow: 0 2px 16px var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .cookie-card:active { transform: scale(0.98); }
+  .cookie-card.selected {
+    border-color: var(--brown-accent);
+    background: #fff8f0;
+  }
+  .cookie-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    width: 24px;
+    height: 24px;
+    background: var(--brown-accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .cookie-emoji {
+    font-size: 42px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .cookie-info { flex: 1; }
+  .cookie-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--brown-dark);
+    margin-bottom: 5px;
+  }
+  .cookie-desc {
+    font-size: 13px;
+    color: #7a6050;
+    line-height: 1.5;
+  }
+  .cookie-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--brown-mid);
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+
+  /* QUANTITY */
+  .qty-wrapper {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .cookie-card.selected .qty-wrapper { display: flex; }
+  .qty-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--brown-accent);
+    background: transparent;
+    color: var(--brown-accent);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s;
+  }
+  .qty-btn:hover { background: var(--brown-accent); color: white; }
+  .qty-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brown-dark);
+    min-width: 20px;
+    text-align: center;
+  }
+  .qty-label { font-size: 12px; color: #9a7a60; }
+
+  /* ORDER PANEL */
+  .order-panel {
+    max-width: 520px;
+    margin: 28px auto 0;
+    padding: 0 20px;
+  }
+  .order-panel h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--brown-dark);
+    margin-bottom: 18px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--brown-accent);
+    margin-bottom: 7px;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 13px 16px;
+    background: var(--warm-white);
+    border: 1.5px solid #e0d2c2;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    border-color: var(--brown-accent);
+  }
+  .form-group textarea { min-height: 80px; resize: vertical; }
+
+  /* ORDER SUMMARY */
+  .order-summary {
+    background: var(--warm-white);
+    border-radius: 16px;
+    padding: 18px 18px 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px var(--shadow);
+  }
+  .order-summary .summary-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--brown-accent);
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    border-bottom: 1px solid #ecdfc8;
+    font-size: 14px;
+  }
+  .summary-item:last-child { border: none; }
+  .summary-item .s-name { color: var(--text-dark); font-weight: 500; }
+  .summary-item .s-qty { color: #9a7a60; margin: 0 8px; }
+  .summary-item .s-price { font-weight: 700; color: var(--brown-mid); }
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 2px solid var(--brown-light);
+    margin-top: 4px;
+  }
+  .summary-total .t-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--brown-dark);
+  }
+  .summary-total .t-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--brown-mid);
+  }
+
+  /* CTA BUTTON */
+  .btn-order {
+    width: 100%;
+    padding: 18px;
+    background: var(--brown-dark);
+    color: var(--cream);
+    border: none;
+    border-radius: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.2s, transform 0.15s;
+    text-decoration: none;
+    margin-bottom: 14px;
+  }
+  .btn-order:hover { background: var(--brown-mid); transform: translateY(-1px); }
+  .btn-order:active { transform: scale(0.98); }
+  .btn-order svg { flex-shrink: 0; }
+
+  .empty-cart {
+    text-align: center;
+    padding: 28px 0 8px;
+    color: #b09070;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--brown-dark);
+    color: var(--cream);
+    text-align: center;
+    padding: 40px 24px 32px;
+    margin-top: 50px;
+  }
+  footer .foot-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 6px;
+  }
+  footer .foot-sub {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--brown-light);
+    margin-bottom: 20px;
+  }
+  footer .contact-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  footer .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: rgba(245,239,228,0.85);
+  }
+  footer small {
+    font-size: 11px;
+    color: rgba(245,239,228,0.35);
+  }
+
+  /* SUCCESS MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(42,18,6,0.7);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-box {
+    background: var(--warm-white);
+    border-radius: 24px;
+    padding: 40px 32px;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    animation: popIn 0.3s ease;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .modal-icon { font-size: 60px; margin-bottom: 16px; }
+  .modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--brown-dark);
+    margin-bottom: 10px;
+  }
+  .modal-text {
+    font-size: 14px;
+    color: #7a6050;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .modal-close {
+    background: var(--brown-dark);
+    color: var(--cream);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .notice {
+    font-size: 12px;
+    color: #9a7a60;
+    text-align: center;
+    padding: 0 20px 24px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrapper">
+    <div class="logo-icon">🍪</div>
+    <span class="logo-sweet">Sweet</span>
+    <span class="logo-cookies">Cookies</span>
+    <span class="logo-df">Brasília · DF</span>
+  </div>
+  <p class="header-tagline">Feitos com amor, entregues com carinho</p>
+</header>
+
+<!-- MENU -->
+<div class="section-title">
+  <p class="sub">Cardápio</p>
+  <h2><em>cookies</em><br>DA SEMANA</h2>
+  <div class="divider"></div>
+</div>
+
+<div class="menu-grid" id="menuGrid">
+
+  <div class="cookie-card" data-id="nutella" data-name="Nutella" data-price="10" onclick="toggleCookie(this)">
+    <div class="cookie-emoji">🍫</div>
+    <div class="cookie-info">
+      <div class="cookie-name">Nutella</div>
+      <div class="cookie-desc">Massa de baunilha com recheio de Nutella.</div>
+      <div class="qty-wrapper">
+        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
+        <span class="qty-num">1</span>
+        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
+        <span class="qty-label">unid.</span>
+      </div>
+    </div>
+    <div class="cookie-price">$10</div>
+  </div>
+
+  <div class="cookie-card" data-id="redvelvet" data-name="Red Velvet" data-price="10" onclick="toggleCookie(this)">
+    <div class="cookie-emoji">❤️</div>
+    <div class="cookie-info">
+      <div class="cookie-name">Red Velvet</div>
+      <div class="cookie-desc">Massa de red velvet com recheio de brigadeiro de leite ninho.</div>
+      <div class="qty-wrapper">
+        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
+        <span class="qty-num">1</span>
+        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
+        <span class="qty-label">unid.</span>
+      </div>
+    </div>
+    <div class="cookie-price">$10</div>
+  </div>
+
+  <div class="cookie-card" data-id="oreo" data-name="Oreo" data-price="12" onclick="toggleCookie(this)">
+    <div class="cookie-emoji">⚫</div>
+    <div class="cookie-info">
+      <div class="cookie-name">Oreo</div>
+      <div class="cookie-desc">Massa black com recheio de Oreo, Nutella e brigadeiro de leite ninho.</div>
+      <div class="qty-wrapper">
+        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
+        <span class="qty-num">1</span>
+        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
+        <span class="qty-label">unid.</span>
+      </div>
+    </div>
+    <div class="cookie-price">$12</div>
+  </div>
+
+  <div class="cookie-card" data-id="kinderbueno" data-name="Kinder Bueno" data-price="10" onclick="toggleCookie(this)">
+    <div class="cookie-emoji">🥛</div>
+    <div class="cookie-info">
+      <div class="cookie-name">Kinder Bueno</div>
+      <div class="cookie-desc">Massa de baunilha com recheio de Kinder.</div>
+      <div class="qty-wrapper">
+        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
+        <span class="qty-num">1</span>
+        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
+        <span class="qty-label">unid.</span>
+      </div>
+    </div>
+    <div class="cookie-price">$10</div>
+  </div>
+
+  <div class="cookie-card" data-id="biscoff" data-name="Biscoff" data-price="12" onclick="toggleCookie(this)">
+    <div class="cookie-emoji">🟤</div>
+    <div class="cookie-info">
+      <div class="cookie-name">Biscoff</div>
+      <div class="cookie-desc">Massa de biscoito Lotus Biscoff com recheio de creme de Biscoff.</div>
+      <div class="qty-wrapper">
+        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
+        <span class="qty-num">1</span>
+        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
+        <span class="qty-label">unid.</span>
+      </div>
+    </div>
+    <div class="cookie-price">$12</div>
+  </div>
+
+  <div class="cookie-card" data-id="pistache" data-name="Pistache" data-price="10" onclick="toggleCookie(this)">
+    <div class="cookie-emoji">🟢</div>
+    <div class="cookie-info">
+      <div class="cookie-name">Pistache</div>
+      <div class="cookie-desc">Massa de baunilha com pedaços de pistache recheado de creme de pistache.</div>
+      <div class="qty-wrapper">
+        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
+        <span class="qty-num">1</span>
+        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
+        <span class="qty-label">unid.</span>
+      </div>
+    </div>
+    <div class="cookie-price">$10</div>
+  </div>
+
+</div>
+
+<!-- ORDER SECTION -->
+<div class="section-title" style="padding-top:40px">
+  <p class="sub">Seu pedido</p>
+  <h2>Finalizar <em>pedido</em></h2>
+  <div class="divider"></div>
+</div>
+
+<div class="order-panel">
+
+  <div id="orderSummary" class="order-summary" style="display:none">
+    <div class="summary-title">Resumo</div>
+    <div id="summaryItems"></div>
+    <div class="summary-total">
+      <span class="t-label">Total</span>
+      <span class="t-val" id="totalVal">$0</span>
+    </div>
+  </div>
+
+  <div id="emptyCart" class="empty-cart">
+    Selecione os cookies acima para montar seu pedido 🍪
+  </div>
+
+  <div class="form-group">
+    <label>Seu nome</label>
+    <input type="text" id="clientName" placeholder="Ex: Maria Silva">
+  </div>
+  <div class="form-group">
+    <label>WhatsApp</label>
+    <input type="tel" id="clientPhone" placeholder="(61) 99999-9999">
+  </div>
+  <div class="form-group">
+    <label>Observações (opcional)</label>
+    <textarea id="clientObs" placeholder="Algum pedido especial?"></textarea>
+  </div>
+
+  <button class="btn-order" onclick="sendOrder()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm.029 18.88a9.955 9.955 0 01-4.744-1.196L2.4 19.2l1.554-4.79A9.98 9.98 0 012.022 12C2.022 6.485 6.514 2 12.029 2S22.036 6.485 22.036 12 17.544 18.88 12.029 18.88z"/>
+    </svg>
+    Enviar pedido via WhatsApp
+  </button>
+
+  <p class="notice">Ao clicar, você será redirecionado para o WhatsApp da Sweet Cookies com o seu pedido pronto. Pagamento combinado na entrega. 🍪</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">Sweet Cookies</div>
+  <div class="foot-sub">Brasília · DF</div>
+  <div class="contact-row">
+    <div class="contact-item">📱 (61) 98134-2410</div>
+    <div class="contact-item">📷 @sweetcookiesdf</div>
+  </div>
+  <small>© 2025 Sweet Cookies DF. Feito com 🍪 e amor.</small>
+</footer>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-icon">🍪</div>
+    <div class="modal-title">Pedido enviado!</div>
+    <div class="modal-text">Você será redirecionado para o WhatsApp. Em breve entraremos em contato para confirmar seu pedido.</div>
+    <button class="modal-close" onclick="closeModal()">Fechar</button>
+  </div>
+</div>
+
+<script>
+  const cart = {};
+
+  function toggleCookie(card) {
+    const id = card.dataset.id;
+    if (card.classList.contains('selected')) {
+      card.classList.remove('selected');
+      delete cart[id];
+    } else {
+      card.classList.add('selected');
+      cart[id] = {
+        name: card.dataset.name,
+        price: parseInt(card.dataset.price),
+        qty: 1
+      };
+    }
+    updateSummary();
+  }
+
+  function changeQty(e, btn, delta) {
+    e.stopPropagation();
+    const card = btn.closest('.cookie-card');
+    const id = card.dataset.id;
+    const qtyEl = btn.parentNode.querySelector('.qty-num');
+    let qty = parseInt(qtyEl.textContent) + delta;
+    if (qty < 1) qty = 1;
+    qtyEl.textContent = qty;
+    if (cart[id]) cart[id].qty = qty;
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const items = Object.values(cart);
+    const summary = document.getElementById('orderSummary');
+    const empty = document.getElementById('emptyCart');
+    const summaryItems = document.getElementById('summaryItems');
+    const totalVal = document.getElementById('totalVal');
+
+    if (items.length === 0) {
+      summary.style.display = 'none';
+      empty.style.display = 'block';
+      return;
+    }
+
+    summary.style.display = 'block';
+    empty.style.display = 'none';
+
+    let total = 0;
+    summaryItems.innerHTML = items.map(item => {
+      const sub = item.price * item.qty;
+      total += sub;
+      return `<div class="summary-item">
+        <span class="s-name">${item.name}</span>
+        <span class="s-qty">× ${item.qty}</span>
+        <span class="s-price">$${sub}</span>
+      </div>`;
+    }).join('');
+
+    totalVal.textContent = `$${total}`;
+  }
+
+  function sendOrder() {
+    const items = Object.values(cart);
+    if (items.length === 0) {
+      alert('Por favor, selecione pelo menos um cookie! 🍪');
+      return;
+    }
+    const name = document.getElementById('clientName').value.trim();
+    const phone = document.getElementById('clientPhone').value.trim();
+    const obs = document.getElementById('clientObs').value.trim();
+
+    if (!name || !phone) {
+      alert('Preencha seu nome e WhatsApp para continuar.');
+      return;
+    }
+
+    const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+    const lines = items.map(i => `• ${i.name} × ${i.qty} = $${i.price * i.qty}`).join('\n');
+
+    let msg = `🍪 *Novo Pedido - Sweet Cookies*\n\n`;
+    msg += `👤 *Nome:* ${name}\n`;
+    msg += `📱 *WhatsApp:* ${phone}\n\n`;
+    msg += `*Itens:*\n${lines}\n\n`;
+    msg += `💰 *Total: $${total}*\n\n`;
+    if (obs) msg += `📝 *Obs:* ${obs}\n\n`;
+    msg += `_Pedido feito pelo site Sweet Cookies DF_ 🍪`;
+
+    const encoded = encodeURIComponent(msg);
+    window.open(`https://wa.me/5561981342410?text=${encoded}`, '_blank');
+    document.getElementById('modal').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('show');
+  }
+</script>
+</body>
+</html>
