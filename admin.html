@@ -29,7 +29,7 @@ button.s{background:#fff;color:var(--d);border:1.5px solid var(--a)}button.x{bac
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const db=supabase.createClient(CFG.URL,CFG.KEY);let P=[];
 const shrink=f=>new Promise(r=>{const i=new Image();i.onload=()=>{const k=Math.min(1,900/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);c.toBlob(r,'image/jpeg',.82)};i.src=URL.createObjectURL(f)});
-async function entrar(){const{error}=await db.auth.signInWithPassword({email:em.value.trim(),password:pw.value});if(error)err.textContent='E-mail ou senha incorretos.';else iniciar()}
+async function entrar(){const{error}=await db.auth.signInWithPassword({email:em.value.trim(),password:pw.value});if(error)err.textContent='Erro: '+error.message;else iniciar()}
 async function iniciar(){const{data}=await db.auth.getSession();if(!data.session)return;login.hidden=true;app.hidden=false;load()}
 function tab(n){p1.hidden=n!=1;p2.hidden=n!=2;t1.className=n==1?'on':'';t2.className=n==2?'on':''}
 async function load(){
