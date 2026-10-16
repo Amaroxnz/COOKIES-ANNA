@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Painel · Sweet Cookies</title>
+<style>
+:root{--c:#f5efe4;--d:#3d1a0a;--a:#a0522d;--w:#fdf8f2}
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,sans-serif;background:var(--c);color:#2a1206;padding:16px;max-width:640px;margin:0 auto}
+h1{font-family:Georgia,serif;color:var(--d);margin:12px 0;font-size:24px}
+.box{background:var(--w);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 10px #3d1a0a26}
+input,textarea{width:100%;padding:10px;border:1.5px solid #e0d2c2;border-radius:10px;font:inherit;margin:4px 0 10px}
+input[type=checkbox]{width:auto;margin-right:6px}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:9px 14px;background:var(--d);color:#fff}
+button.s{background:#fff;color:var(--d);border:1.5px solid var(--a)}button.x{background:#a33}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row img,.ph{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--c);display:flex;align-items:center;justify-content:center;font-size:28px}
+.grow{flex:1;min-width:120px}.tabs{display:flex;gap:8px;margin-bottom:12px}.tabs button{flex:1;background:#fff;color:var(--d)}.tabs .on{background:var(--a);color:#fff}
+.out{color:#a33;font-weight:700}label{font-size:12px;font-weight:600;color:var(--a)}.stars{color:#d99a1c}
+</style></head><body>
+<div id="login" class="box"><h1>🍪 Área da dona</h1><label>E-mail</label><input id="em" type="email"><label>Senha</label><input id="pw" type="password" onkeydown="if(event.key=='Enter')entrar()"><button onclick="entrar()">Entrar</button><p id="err" class="out"></p></div>
+<div id="app" hidden>
+<div class="row"><h1 class="grow">🍪 Painel</h1><button class="s" onclick="db.auth.signOut().then(()=>location.reload())">Sair</button></div>
+<div class="tabs"><button id="t1" class="on" onclick="tab(1)">Produtos</button><button id="t2" onclick="tab(2)">Avaliações <span id="pend"></span></button></div>
+<div id="p1"><button onclick="edit()" style="width:100%;margin-bottom:12px">+ Novo produto</button>
+<div id="fform" class="box" hidden><input type="hidden" id="fid"><label>Nome</label><input id="fn"><label>Descrição</label><textarea id="fd" rows="2"></textarea>
+<label>Preço (R$)</label><input id="fp" inputmode="decimal"><label>Quantidade em estoque (0 = esgotado)</label><input id="fs" type="number" min="0"><label>Emoji (usado se não tiver foto)</label><input id="fe" maxlength="4">
+<label>Foto (opcional — escolha outra para trocar)</label><input id="ff" type="file" accept="image/*"><label><input type="checkbox" id="fa" checked>Mostrar no site</label>
+<div class="row"><button onclick="salvar()">Salvar</button><button class="s" onclick="fform.hidden=true">Cancelar</button><button class="x" id="fdel" onclick="del()">Excluir</button></div></div>
+<div id="plist"></div></div><div id="p2" hidden></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script><script src="config.js"></script>
+<script>
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const db=supabase.createClient(CFG.URL,CFG.KEY);let P=[];
+const shrink=f=>new Promise(r=>{const i=new Image();i.onload=()=>{const k=Math.min(1,900/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*k;c.height=i.height*k;c.getContext('2d').drawImage(i,0,0,c.width,c.height);c.toBlob(r,'image/jpeg',.82)};i.src=URL.createObjectURL(f)});
+async function entrar(){const{error}=await db.auth.signInWithPassword({email:em.value.trim(),password:pw.value});if(error)err.textContent='E-mail ou senha incorretos.';else iniciar()}
+async function iniciar(){const{data}=await db.auth.getSession();if(!data.session)return;login.hidden=true;app.hidden=false;load()}
+function tab(n){p1.hidden=n!=1;p2.hidden=n!=2;t1.className=n==1?'on':'';t2.className=n==2?'on':''}
+async function load(){
+  P=(await db.from('products').select('*').order('sort').order('name')).data||[];
+  plist.innerHTML=P.map(p=>`<div class="box row">${p.photo_url?`<img src="${esc(p.photo_url)}">`:`<div class="ph">${esc(p.emoji)}</div>`}<div class="grow"><b>${esc(p.name)}</b> · R$${p.price}<br>${p.stock<=0?'<span class="out">ESGOTADO</span>':p.stock+' em estoque'}${p.active?'':' · oculto'}</div><button class="s" onclick="stk('${p.id}',-1)">−</button><button class="s" onclick="stk('${p.id}',1)">+</button><button class="s" onclick="stk('${p.id}',-9999)">Esgotou</button><button class="s" onclick="edit('${p.id}')">Editar</button></div>`).join('');
+  const R=(await db.from('reviews').select('*,products(name)').order('approved').order('created_at',{ascending:false})).data||[];
+  pend.textContent=R.filter(r=>!r.approved).length?`(${R.filter(r=>!r.approved).length} novas)`:'';
+  p2.innerHTML=R.map(r=>`<div class="box"><span class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span> <b>${esc(r.name)}</b>${r.products?.name?' · '+esc(r.products.name):''} ${r.approved?'':'<span class="out">pendente</span>'}<p style="margin:8px 0">${esc(r.comment)}</p><div class="row">${r.approved?'':`<button onclick="rv('${r.id}',1)">Aprovar</button>`}<button class="x" onclick="rv('${r.id}',0)">Excluir</button></div></div>`).join('')||'<p>Nenhuma avaliação ainda.</p>';
+}
+async function stk(id,d){const p=P.find(x=>x.id==id);await db.from('products').update({stock:Math.max(0,p.stock+d)}).eq('id',id);load()}
+async function rv(id,ok){ok?await db.from('reviews').update({approved:true}).eq('id',id):confirm('Excluir esta avaliação?')&&await db.from('reviews').delete().eq('id',id);load()}
+function edit(id){const p=P.find(x=>x.id==id)||{stock:20,emoji:'🍪',active:true};fform.hidden=false;fid.value=p.id||'';fn.value=p.name||'';fd.value=p.description||'';fp.value=p.price??'';fs.value=p.stock;fe.value=p.emoji;fa.checked=p.active;ff.value='';fdel.hidden=!p.id;fform.scrollIntoView()}
+async function salvar(){
+  const id=fid.value,f=ff.files[0],row={name:fn.value.trim(),description:fd.value.trim(),price:+fp.value.replace(',','.'),stock:+fs.value||0,emoji:fe.value||'🍪',active:fa.checked};
+  if(!row.name||!(row.price>=0))return alert('Preencha nome e preço.');
+  if(f){const path=Date.now()+'.jpg',{error}=await db.storage.from('produtos').upload(path,await shrink(f),{contentType:'image/jpeg'});if(error)return alert(error.message);row.photo_url=db.storage.from('produtos').getPublicUrl(path).data.publicUrl}
+  const{error}=id?await db.from('products').update(row).eq('id',id):await db.from('products').insert(row);
+  if(error)return alert(error.message);fform.hidden=true;load()}
+async function del(){if(confirm('Excluir este produto de vez? (Para só esconder, desmarque "Mostrar no site")')){await db.from('products').delete().eq('id',fid.value);fform.hidden=true;load()}}
+iniciar();
+</script></body></html>

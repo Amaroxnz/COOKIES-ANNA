@@ -456,6 +456,15 @@
     padding: 0 20px 24px;
     line-height: 1.6;
   }
+  .cookie-photo{width:84px;height:84px;object-fit:cover;border-radius:14px;flex-shrink:0}
+  .cookie-card.soldout{opacity:.55;cursor:default}
+  .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:#a33;border-radius:20px;padding:3px 10px;margin-top:8px}
+  .badge.low{background:var(--brown-light)}
+  .reviews{max-width:520px;margin:0 auto;padding:20px 20px 0}
+  .review{background:var(--warm-white);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 12px var(--shadow);font-size:14px}
+  .stars{color:#d99a1c;letter-spacing:2px}.rv-meta{font-size:12px;color:#9a7a60}
+  .star-pick button{background:none;border:0;font-size:32px;color:#d8c7b3;cursor:pointer}.star-pick button.on{color:#d99a1c}
+  footer a{color:rgba(245,239,228,.35);font-size:11px;text-decoration:none}
 </style>
 </head>
 <body>
@@ -478,84 +487,7 @@
   <div class="divider"></div>
 </div>
 
-<div class="menu-grid" id="menuGrid">
-
-  <div class="cookie-card" data-id="nutella" data-name="Nutella" data-price="13" onclick="toggleCookie(this)">
-    <div class="cookie-emoji">🍫</div>
-    <div class="cookie-info">
-      <div class="cookie-name">Nutella</div>
-      <div class="cookie-desc">Massa de baunilha com recheio de Nutella.</div>
-      <div class="qty-wrapper">
-        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
-        <span class="qty-num">1</span>
-        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
-        <span class="qty-label">unid.</span>
-      </div>
-    </div>
-    <div class="cookie-price">R$13</div>
-  </div>
-
-  <div class="cookie-card" data-id="oreo" data-name="Oreo" data-price="12" onclick="toggleCookie(this)">
-    <div class="cookie-emoji">⚫</div>
-    <div class="cookie-info">
-      <div class="cookie-name">Oreo</div>
-      <div class="cookie-desc">Massa black com recheio de Oreo, Nutella e brigadeiro de leite ninho.</div>
-      <div class="qty-wrapper">
-        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
-        <span class="qty-num">1</span>
-        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
-        <span class="qty-label">unid.</span>
-      </div>
-    </div>
-    <div class="cookie-price">R$12</div>
-  </div>
-
-  <div class="cookie-card" data-id="kinderbueno" data-name="Kinder Bueno" data-price="13" onclick="toggleCookie(this)">
-    <div class="cookie-emoji">🥛</div>
-    <div class="cookie-info">
-      <div class="cookie-name">Kinder Bueno</div>
-      <div class="cookie-desc">Massa de baunilha com recheio de Kinder.</div>
-      <div class="qty-wrapper">
-        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
-        <span class="qty-num">1</span>
-        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
-        <span class="qty-label">unid.</span>
-      </div>
-    </div>
-    <div class="cookie-price">R$13</div>
-  </div>
-
-  <div class="cookie-card" data-id="redvelvet" data-name="Red Velvet" data-price="12" onclick="toggleCookie(this)">
-    <div class="cookie-emoji">❤️</div>
-    <div class="cookie-info">
-      <div class="cookie-name">Red Velvet</div>
-      <div class="cookie-desc">Massa de red velvet com recheio de brigadeiro de leite ninho.</div>
-      <div class="qty-wrapper">
-        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
-        <span class="qty-num">1</span>
-        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
-        <span class="qty-label">unid.</span>
-      </div>
-    </div>
-    <div class="cookie-price">R$12</div>
-  </div>
-
-  <div class="cookie-card" data-id="pistache" data-name="Pistache" data-price="12" onclick="toggleCookie(this)">
-    <div class="cookie-emoji">🟢</div>
-    <div class="cookie-info">
-      <div class="cookie-name">Pistache</div>
-      <div class="cookie-desc">Massa de baunilha com pedaços de pistache recheado de creme de pistache.</div>
-      <div class="qty-wrapper">
-        <button class="qty-btn" onclick="changeQty(event, this, -1)">−</button>
-        <span class="qty-num">1</span>
-        <button class="qty-btn" onclick="changeQty(event, this, 1)">+</button>
-        <span class="qty-label">unid.</span>
-      </div>
-    </div>
-    <div class="cookie-price">R$12</div>
-  </div>
-
-</div>
+<div class="menu-grid" id="menuGrid"><p class="empty-cart">Carregando cardápio… 🍪</p></div>
 
 <!-- ORDER SECTION -->
 <div class="section-title" style="padding-top:40px">
@@ -621,6 +553,17 @@
   <p class="notice">Ao clicar, você será redirecionado para o WhatsApp da Sweet Cookies com o seu pedido pronto. Pagamento combinado na entrega. 🍪</p>
 </div>
 
+<div id="reviewsSection" style="display:none">
+<div class="section-title"><p class="sub">Avaliações</p><h2>O que <em>dizem</em></h2><div class="divider"></div><p id="avg" class="rv-meta" style="margin-top:12px"></p></div>
+<div class="reviews"><div id="reviewList"></div>
+<div class="order-panel" style="padding:0;margin-top:24px"><h3>Deixe sua avaliação</h3>
+<div class="form-group"><label>Seu nome</label><input type="text" id="rvName" maxlength="60"></div>
+<div class="form-group"><label>Sobre qual sabor?</label><select id="rvProduct"></select></div>
+<div class="form-group"><label>Nota</label><div class="star-pick"><button type="button" onclick="pickStar(1)">★</button><button type="button" onclick="pickStar(2)">★</button><button type="button" onclick="pickStar(3)">★</button><button type="button" onclick="pickStar(4)">★</button><button type="button" onclick="pickStar(5)">★</button></div></div>
+<div class="form-group"><label>Comentário</label><textarea id="rvText" maxlength="500"></textarea></div>
+<button class="btn-order" onclick="sendReview()">Enviar avaliação</button>
+<p class="notice" id="rvMsg">Sua avaliação aparece depois de aprovada. 🍪</p></div></div></div>
+
 <!-- FOOTER -->
 <footer>
   <div class="foot-logo">Sweet Cookies</div>
@@ -629,7 +572,7 @@
     <div class="contact-item">📱 (61) 98134-2410</div>
     <div class="contact-item">📷 @sweetcookiesdf</div>
   </div>
-  <small>© 2025 Sweet Cookies DF. Feito com 🍪 e amor.</small>
+  <small>© 2025 Sweet Cookies DF. Feito com 🍪 e amor.</small> <a href="admin.html">·</a>
 </footer>
 
 <!-- SUCCESS MODAL -->
@@ -663,7 +606,7 @@
       card.classList.add('selected');
       cart[id] = {
         name: card.dataset.name,
-        price: parseInt(card.dataset.price),
+        price: parseFloat(card.dataset.price),
         qty: 1
       };
     }
@@ -677,6 +620,8 @@
     const qtyEl = btn.parentNode.querySelector('.qty-num');
     let qty = parseInt(qtyEl.textContent) + delta;
     if (qty < 1) qty = 1;
+    const max = parseInt(card.dataset.stock) || 99;
+    if (qty > max) qty = max;
     qtyEl.textContent = qty;
     if (cart[id]) cart[id].qty = qty;
     updateSummary();
@@ -760,5 +705,8 @@
     document.getElementById('modal').classList.remove('show');
   }
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="loja.js"></script>
 </body>
 </html>
